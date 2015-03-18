@@ -3,12 +3,13 @@
 $sdl2url = "https://www.libsdl.org/release/$sdl2.zip"
 $sdl2imageurl = "http://www.libsdl.org/projects/SDL_image/release/$sdl2image.zip"
 $sdl2ttfurl = "http://www.libsdl.org/projects/SDL_ttf/release/$sdl2ttf.zip"
-$glewurl = "https://github.com/nigels-com/glew/archive/$glew.zip"
+$glewurl = "https://sourceforge.net/projects/glew/files/glew/$glewver/$glew.zip/download"
 
+$webclient = New-Object System.Net.WebClient
 function download($url, $dest)
 {
   echo "Downloading $url"
-  Invoke-WebRequest $url -OutFile $dest
+  $webclient.DownloadFile($url, $dest)
   echo "Done."
 }
 
