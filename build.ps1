@@ -10,13 +10,13 @@ function exitOnError()
   }
 }
 
-function recopyDir($path, $dest)
+function copyRecursive($path, $dest)
 {
-  if (Test-Path -Path $dest)
+  if (!(Test-Path -Path $dest))
   {
-    Remove-Item $dest -Recurse -Force
+    New-Item $dest -itemType Directory -Force
   }
-  Copy-Item -Path $path -Destination $dest -Recurse -Force
+  Copy-Item -Path $path\* -Destination $dest -Recurse -Force
 }
 
 function copyHeaders($dir, $dest)
@@ -49,7 +49,7 @@ exitOnError
 msbuild $sdl2\VisualC\SDL_VS2013.sln --% /t:SDL2;SDL2main /p:Configuration=Release /p:Platform=x64
 exitOnError
 
-recopyDir $sdl2 .\SDL # for sdl2image and sdl2ttf
+copyRecursive $sdl2 SDL # for sdl2image and sdl2ttf
 
 devenv $sdl2image\VisualC\SDL_image_VS2012.sln /upgrade
 msbuild $sdl2image\VisualC\SDL_image_VS2012.sln --% /p:AdditionalIncludePaths=$sdl2includeabs /p:Configuration=Debug /p:Platform=Win32
@@ -72,10 +72,17 @@ exitOnError
 msbuild $sdl2ttf\VisualC\SDL_ttf_VS2012.sln --% /p:Configuration=Release /p:Platform=x64
 exitOnError
 
+devenv $glew\build\vc12\glew.sln /upgrade
+msbuild $glew\build\vc12\glew.sln --% /t:glew_shared /p:Configuration="Debug MX" /p:Platform=Win32
+msbuild $glew\build\vc12\glew.sln --% /t:glew_shared /p:Configuration="Debug MX" /p:Platform=x64
+msbuild $glew\build\vc12\glew.sln --% /t:glew_shared /p:Configuration="Release MX" /p:Platform=Win32
+msbuild $glew\build\vc12\glew.sln --% /t:glew_shared /p:Configuration="Release MX" /p:Platform=x64
+
 # install
-recopyDir $sdl2\include include\SDL2
+copyRecursive $sdl2\include include\SDL2
 copyHeaders $sdl2image include\SDL2
 copyHeaders $sdl2ttf include\SDL2
+copyRecursive $glew\include include
 
 copyLib $sdl2\VisualC\SDL\Win32\Debug lib\Win32\Debug
 copyLib $sdl2\VisualC\SDL\Win32\Release lib\Win32\Release
@@ -103,3 +110,12 @@ copyLib $sdl2ttf\VisualC\external\lib\x86 lib\Win32\Debug
 copyLib $sdl2ttf\VisualC\external\lib\x86 lib\Win32\Release
 copyLib $sdl2ttf\VisualC\external\lib\x64 lib\x64\Debug
 copyLib $sdl2ttf\VisualC\external\lib\x64 lib\x64\Release
+
+copyLib "$glew\lib\Debug MX\Win32" lib\Win32\Debug
+copyLib "$glew\lib\Release MX\Win32" lib\Win32\Release
+copyLib "$glew\lib\Debug MX\x64" lib\x64\Debug
+copyLib "$glew\lib\Release MX\x64" lib\x64\Release
+copyLib "$glew\bin\Debug MX\Win32" lib\Win32\Debug
+copyLib "$glew\bin\Release MX\Win32" lib\Win32\Release
+copyLib "$glew\bin\Debug MX\x64" lib\x64\Debug
+copyLib "$glew\bin\Release MX\x64" lib\x64\Release
