@@ -1,3 +1,5 @@
+$ErrorActionPreference = "Stop"
+
 . .\definitions.ps1
 
 $sdl2url = "https://www.libsdl.org/release/$sdl2.zip"

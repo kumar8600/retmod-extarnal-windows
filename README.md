@@ -21,6 +21,7 @@ From Visual Studio Command Prompt:
 ```
 powershell .\get.ps1
 powershell .\build.ps1
+powershell .\install.ps1
 ```
 
 [retmod]: https://github.com/kumar8600/retmod
