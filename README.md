@@ -10,11 +10,18 @@ Precompiled libraries to build [retmod] on Windows.
 
 ## (For contributors) get source and build
 
-Below commands build and place headers and libraries from sources from internet.
+### Prerequisites
+
+* [DirectX SDK][dxsdk]
+
+### Build
 
 From Visual Studio Command Prompt:
 
-  powershell .\get.ps1
-  powershell .\build.ps1
+```
+powershell .\get.ps1
+powershell .\build.ps1
+```
 
 [retmod]: https://github.com/kumar8600/retmod
+[dxsdk]: http://www.microsoft.com/en-us/download/details.aspx?id=6812
